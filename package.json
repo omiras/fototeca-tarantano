@@ -2,10 +2,10 @@
   "name": "My Beautiful Gallery",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "build-css": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/main.css --watch",
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.2",
