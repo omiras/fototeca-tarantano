@@ -69,11 +69,11 @@
                     </div>
                     <div class="ml-3">
                         <div id="edTit">
-                            <p onclick="spanSwitch(this)" class="uppercase text-slate-400 tracking-widest text-xl mt-2"
+                            <p onclick="spanSwitch(this)" class="uppercase text-slate-400 tracking-widest text-xl mt-2 select-none"
                                 id="adm_title"></p>
                         </div>
                         <div id="edDate">
-                            <p onclick="spanSwitch(this)" class="text-sm text-slate-400 tracking-wider" id="adm_date">
+                            <p onclick="spanSwitch(this)" class="text-sm text-slate-400 tracking-wider select-none" id="adm_date">
                             </p>
                         </div>
                         <div class="flex flex-row md:flex-col">
@@ -87,7 +87,9 @@
                                 
 
                                 <a onclick="confirmDeletion()"class="btn-primary cursor-pointer" >Delete</a>
-                                <a id="adm_save" class="btn-primary">Save</a>
+                                <a id="adm_save" class="btn-primary hover:bg-sky-900/50 hover:text-slate-500
+                                bg-sky-900/50
+                                text-slate-500">Save</a>
                             </div>
 
 
@@ -162,7 +164,14 @@
                 adm_delete.href = `/update?q=delete&id=${activeImage.baseId}`;
 
                 cancelDeletion();  
+                let adm_save = document.querySelector("#adm_save");
+                adm_save.removeAttribute("href");
+                adm_save.classList.add("hover:bg-sky-900/50");
+                adm_save.classList.add("hover:text-slate-500");
+                adm_save.classList.add("bg-sky-900/50");
+                adm_save.classList.add("text-slate-500");
 
+                
 
             })
         })
@@ -215,6 +224,7 @@
             
             cancelDeletion(); 
 
+
         }
 
         function spanReset(e) {
@@ -238,7 +248,7 @@
 
                 edit.innerHTML = `<p 
             onclick="spanSwitch(this)" 
-            class="uppercase text-slate-400 tracking-widest text-xl"
+            class="uppercase text-slate-400 tracking-widest text-xl select-none"
             id="adm_title">${newTitle}</p>`;
                 galImgEdit.textContent = newTitle;
                 galImg.dataset.name = newTitle;
@@ -256,7 +266,7 @@
 
                 edit.innerHTML = `<p 
                 onclick="spanSwitch(this)" 
-                class="text-sm text-slate-400 tracking-wider" 
+                class="text-sm text-slate-400 tracking-wider select-none" 
                 id="adm_date">${newDate}</p>`;
                 galImgEdit.textContent = newDate;
                 galImg.dataset.date = newDate;
@@ -266,7 +276,10 @@
             let adm_save = document.querySelector("#adm_save");
             adm_save.href =
                 `/update?q=update&id=${activeImage.baseId}&title=${activeImage.title}&date=${activeImage.date}`;
-
+                adm_save.classList.remove("hover:bg-sky-900/50");
+                adm_save.classList.remove("hover:text-slate-500");
+                adm_save.classList.remove("bg-sky-900/50");
+                adm_save.classList.remove("text-slate-500");
                  
         }
 
