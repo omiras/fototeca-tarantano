@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./partials/head'); %>
+</head>
+
+<body class="bg-slate-800">
+    <h1 class="text-center text-3xl sm:text-5xl text-slate-400 font-ruthie pt-6 mb-8">My Beautiful Gallery</h1>
+
+    <%- include('./partials/side'); %>
+
+    <!-- the gallery -->
+    <section id="mainGallery" class="flex justify-center w-screen flex-wrap px-24">
+        <% pics.forEach(function(p,i) { %>
+        <div class="each font-sans m-2 drop-shadow-md hover:drop-shadow-xl bg-slate-700/70 hover:bg-slate-700 p-3 cursor-pointer flex-shrink-0"
+            id="<%= p.id %>_<%= ((p.title).replace(/\s/g, '_')).toLowerCase() %>" data-id="<%= p.id %>"
+            data-name="<%= p.title %>" data-url="<%= p.URL %>" data-date="<%= p.date %>"
+            data-color1="<%= p.pallete[0] %>" data-color2="<%= p.pallete[1] %>" data-color3="<%= p.pallete[2] %>"
+            data-color4="<%= p.pallete[3] %>" data-bs-toggle="modal" data-bs-target="#exampleModalXl">
+            <img class="w-56 sm:h-36 sm:w-auto" src="<%= p.URL %>" alt="<%= p.title %>">
+            <p id="<%= i %>_title" class="uppercase text-center text-slate-400 pt-2 tracking-widest text-sm">
+                <%= p.title %>
+
+            </p>
+            <p class="text-xs text-center text-slate-400 tracking-wider">
+                <%= p.date %>
+            </p>
+            <div class="flex justify-center mt-2">
+                <div class="w-4 h-4" style="background-color: rgb(<%= p.pallete[0] %>)"></div>
+                <div class="w-4 h-4" style="background-color: rgb(<%= p.pallete[1] %>)"></div>
+                <div class="w-4 h-4" style="background-color: rgb(<%= p.pallete[2] %>)"></div>
+                <div class="w-4 h-4" style="background-color: rgb(<%= p.pallete[3] %>)"></div>
+            </div>
+
+        </div>
+
+        <% }); %>
+    </section>
+
+
+
+    <!-- image detailed info - modal -->
+    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto bg-slate-800 sm:bg-slate-800/80"
+        id="exampleModalXl" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-xl relative w-full h-full pointer-events-none flex justify-center items-center">
+
+            <div
+                class="modal-content h-full sm:h-auto border-none shadow-lg relative flex flex-col pointer-events-auto  bg-clip-padding rounded-md outline-none text-current bg-slate-700/0 sm:bg-slate-700 p-3">
+
+                <div
+                    class="modal-header flex flex-shrink-0 items-center justify-end pb-4 border-b border-slate-600 rounded-t-md">
+                    <button type="button"
+                        class="btn-close box-content w-4 h-4 p-1 text-white border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-white hover:opacity-80"
+                        data-bs-dismiss="modal" aria-label="Close">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 opacity-75" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <line x1="9" y1="9" x2="15" y2="15" />
+                            <line x1="15" y1="9" x2="9" y2="15" />
+                        </svg>
+
+                    </button>
+                </div>
+                <section class="h-[70vh] flex md:justify-center md:justify-items-center flex-col md:flex-row ">
+                    <div class="flex-shrink-0">
+                        <img class=" h-auto w-full md:h-80 lg:h-full" src="" alt="" id="adm_img">
+                    </div>
+                    <div class="ml-3">
+                        <div id="edTit">
+                            <p onclick="spanSwitch(this)" class="uppercase text-slate-400 tracking-widest text-xl mt-2"
+                                id="adm_title"></p>
+                        </div>
+                        <div id="edDate">
+                            <p onclick="spanSwitch(this)" class="text-sm text-slate-400 tracking-wider" id="adm_date">
+                            </p>
+                        </div>
+                        <div class="flex flex-row md:flex-col">
+                            <div class="flex flex-col justify-center mt-6 ">
+                                <div id="adm_col1" class="w-10 sm:w-36 h-10 relative group"></div>
+                                <div id="adm_col2" class="w-10 sm:w-36 h-10 relative group"></div>
+                                <div id="adm_col3" class="w-10 sm:w-36 h-10 relative group"></div>
+                                <div id="adm_col4" class="w-10 sm:w-36 h-10 relative group"></div>
+                            </div>
+                            <div class="mt-7 ml-32 sm:mt-7 sm:ml-5 md:mt-4 md:ml-0">
+                                
+
+                                <a onclick="confirmDeletion()"class="btn-primary cursor-pointer" >Delete</a>
+                                <a id="adm_save" class="btn-primary">Save</a>
+                            </div>
+
+
+
+
+                            <div class="fixed top-2/4 left-2/4 -translate-x-1/4 p-5 bg-slate-800/80 rounded-xl shadow-lg -mt-7 hidden" id="adm_delete_confirm"> 
+                                <p class="text-sm text-slate-400 tracking-wider" id="adm_date">Are you sure you want to delete this image?</p>
+                                <div class="mt-7 ml-32 sm:mt-7 sm:ml-5 md:mt-4 md:ml-0">
+                                    <a id="adm_delete_confirm_btn" class="btn-primary bg-emerald-900 hover:bg-emerald-800">Yes</a>
+                                    <a id="adm_delete_cancel_btn" onclick="cancelDeletion()" class="btn-primary bg-red-900 hover:bg-red-800 cursor-pointer">No</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        //function to open a fullscreen modal to see more information and edit an image
+        let activeImage = {};
+        const gallery = document.querySelectorAll("#mainGallery>.each");
+
+        // console.log(gallery);
+
+        gallery.forEach(function (p) {
+            //console.log(p);
+            p.addEventListener("click", (e) => {
+
+
+                activeImage.id = p.id;
+                activeImage.baseId = p.dataset.id;
+                activeImage.title = p.dataset.name;
+                activeImage.url = p.dataset.url;
+                activeImage.date = p.dataset.date;
+                activeImage.color1 = p.dataset.color1;
+                activeImage.color2 = p.dataset.color2;
+                activeImage.color3 = p.dataset.color3;
+                activeImage.color4 = p.dataset.color4;
+
+
+                let adm_img = document.querySelector("#adm_img");
+                adm_img.src = activeImage.url;
+
+                let adm_title = document.querySelector("#adm_title");
+                adm_title.textContent = activeImage.title;
+
+                let adm_date = document.querySelector("#adm_date");
+                adm_date.textContent = activeImage.date;
+
+                let adm_col1 = document.querySelector("#adm_col1");
+                adm_col1.style.backgroundColor = `rgb(${activeImage.color1})`;
+                adm_col1.innerHTML = `<p class="absolute left-full sm:left-0 p-2 h-10 w-34 sm:w-36 sm:w-full bg-gray-900/80 text-slate-400 text-sm opacity-0 group-hover:opacity-100">rgb(${activeImage.color1})</p>`;
+
+                
+                let adm_col2 = document.querySelector("#adm_col2");
+                adm_col2.style.backgroundColor = `rgb(${activeImage.color2})`;
+                adm_col2.innerHTML = `<p class="absolute left-full sm:left-0 p-2 h-10 w-34 sm:w-36 sm:w-full bg-gray-900/80 text-slate-400 text-sm opacity-0 group-hover:opacity-100">rgb(${activeImage.color2})</p>`;
+
+                let adm_col3 = document.querySelector("#adm_col3");
+                adm_col3.style.backgroundColor = `rgb(${activeImage.color3})`;
+                adm_col3.innerHTML = `<p class="absolute left-full sm:left-0 p-2 h-10 w-34 sm:w-36 sm:w-full bg-gray-900/80 text-slate-400 text-sm opacity-0 group-hover:opacity-100">rgb(${activeImage.color3})</p>`;
+
+                let adm_col4 = document.querySelector("#adm_col4");
+                adm_col4.style.backgroundColor = `rgb(${activeImage.color4})`;
+                adm_col4.innerHTML = `<p class="absolute left-full sm:left-0 p-2 h-10 w-34 sm:w-36 sm:w-full bg-gray-900/80 text-slate-400 text-sm opacity-0 group-hover:opacity-100">rgb(${activeImage.color4})</p>`;
+
+                let adm_delete = document.querySelector("#adm_delete_confirm_btn");
+                adm_delete.href = `/update?q=delete&id=${activeImage.baseId}`;
+
+                cancelDeletion();  
+
+
+            })
+        })
+
+        //the following two functions make the title editable onclick
+        function spanSwitch(e) {
+            let txt = e.innerText;
+            let edTit = e.parentNode;
+            //console.log(e);
+
+            if (e.id == "adm_title") {
+                edTit.innerHTML = `<input 
+                            id='input_title'
+                            onblur='spanReset(this)'
+                            type="text" 
+                            class="
+                              mt-1
+                              block
+                              w-full
+                              rounded-md
+                              border-gray-300
+                              shadow-sm
+                              focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-slate-400
+                            "
+                            value='${txt}'  
+                            pattern="^[a-zA-Z0-9 ]*$" 
+                            minlength=2 
+                            maxlength="10" 
+                            title="The title should be between 2 and 10 characters and it may only contain letters, numbers and spaces" 
+                            required>`
+                document.getElementsByTagName('input')[0].focus();
+            } else {
+                edTit.innerHTML = `<input 
+                            id='input_date'
+                            onblur='spanReset(this)'
+                            type="date" 
+                            class="
+                              mt-1
+                              block
+                              w-full
+                              rounded-md
+                              border-gray-300
+                              shadow-sm
+                              focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-slate-400
+                            " 
+                            value='${txt}' 
+                            required>`;
+                document.getElementsByTagName('input')[0].focus();
+            }
+            
+            cancelDeletion(); 
+
+        }
+
+        function spanReset(e) {
+            let edit = e.parentNode;
+            let galImg = document.querySelector(`div[id="${activeImage.id}"]`);
+            let galImgEdit;
+
+
+            if (e.id == "input_title") {
+                galImgEdit = document.querySelector(`div[id="${activeImage.id}"] p:nth-child(2)`);
+
+                let newTitle;
+
+
+                if (!e.checkValidity()) {
+                    e.reportValidity();
+                    newTitle = activeImage.title
+                } else {
+                    newTitle = e.value;
+                }
+
+                edit.innerHTML = `<p 
+            onclick="spanSwitch(this)" 
+            class="uppercase text-slate-400 tracking-widest text-xl"
+            id="adm_title">${newTitle}</p>`;
+                galImgEdit.textContent = newTitle;
+                galImg.dataset.name = newTitle;
+                activeImage.title = newTitle;
+            } else {
+
+                galImgEdit = document.querySelector(`div[id="${activeImage.id}"] p:nth-child(3)`)
+                let newDate
+
+                if (!e.value) {
+                    newDate = activeImage.date
+                } else {
+                    newDate = e.value;
+                }
+
+                edit.innerHTML = `<p 
+                onclick="spanSwitch(this)" 
+                class="text-sm text-slate-400 tracking-wider" 
+                id="adm_date">${newDate}</p>`;
+                galImgEdit.textContent = newDate;
+                galImg.dataset.date = newDate;
+                activeImage.date = newDate;
+            }
+
+            let adm_save = document.querySelector("#adm_save");
+            adm_save.href =
+                `/update?q=update&id=${activeImage.baseId}&title=${activeImage.title}&date=${activeImage.date}`;
+
+                 
+        }
+
+
+        //function to confirm the deletion of an image
+
+        function confirmDeletion(e){
+            let message = document.querySelector("#adm_delete_confirm");
+            message.classList.remove("hidden");
+        }
+
+        function cancelDeletion(e){
+            let message = document.querySelector("#adm_delete_confirm");
+            message.classList.add("hidden");
+        }
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+</body>
+
+</html>

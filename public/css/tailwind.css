@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-primary {
+  @apply px-4 py-2 font-semibold text-sm bg-sky-900 hover:bg-sky-700 text-slate-400 hover:text-slate-200 rounded-lg shadow-sm;
+}}
+
+
+
+/* pseudo selectores y otros especiales */
+:root {
+  --primary: #ffffff;
+  --secondary: #3f2f21;
+  --bg-primary: rgba(190, 183, 171, 0.3);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+
