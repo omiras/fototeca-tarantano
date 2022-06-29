@@ -184,6 +184,7 @@ app.post('/imgupload', async function (req, res) {
     //console.log("notInDataBase", notInDataBase);
 
     if (isImage && notInDataBase) {
+        res.redirect("/");
         let cPallete = await myColorPallete(imgURL);
 
         let myNewPic = {
@@ -199,7 +200,7 @@ app.post('/imgupload', async function (req, res) {
         let data = JSON.stringify(pictures, null, 2);
         fs.writeFileSync('photos.json', data);
 
-        res.redirect("/");
+        //res.redirect("/");
     } else {
         //res.redirect("/upload");
         res.redirect(url.format({
