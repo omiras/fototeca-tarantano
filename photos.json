@@ -67,7 +67,7 @@
   },
   {
     "id": 23,
-    "title": "CAT FIGT",
+    "title": "CAT FIGhT",
     "URL": "https://www.lalocadelosgatos.com/wp-content/uploads/2013/09/Funny-Cats-Fight-Wallpaper.jpg",
     "date": "2022-06-08",
     "pallete": [
@@ -297,6 +297,39 @@
     ]
   },
   {
+    "id": 29,
+    "title": "green eyes",
+    "URL": "https://static.scientificamerican.com/sciam/cache/file/9CAE9C60-8BC5-4CA3-95C180EFACDD99FD_source.jpg",
+    "date": "2020-07-15",
+    "pallete": [
+      [
+        46,
+        44,
+        37
+      ],
+      [
+        204,
+        202,
+        189
+      ],
+      [
+        146,
+        173,
+        156
+      ],
+      [
+        132,
+        121,
+        101
+      ],
+      [
+        131,
+        143,
+        152
+      ]
+    ]
+  },
+  {
     "id": 25,
     "title": "CAT FLIGHT",
     "URL": "https://cattime.com/assets/uploads/gallery/amazing-cats-in-flight/cats-in-flight-1.jpg",
@@ -359,39 +392,6 @@
         187,
         179,
         180
-      ]
-    ]
-  },
-  {
-    "id": 29,
-    "title": "green eyes",
-    "URL": "https://static.scientificamerican.com/sciam/cache/file/9CAE9C60-8BC5-4CA3-95C180EFACDD99FD_source.jpg",
-    "date": "2020-07-15",
-    "pallete": [
-      [
-        46,
-        44,
-        37
-      ],
-      [
-        204,
-        202,
-        189
-      ],
-      [
-        146,
-        173,
-        156
-      ],
-      [
-        132,
-        121,
-        101
-      ],
-      [
-        131,
-        143,
-        152
       ]
     ]
   }

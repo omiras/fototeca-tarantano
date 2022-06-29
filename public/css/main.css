@@ -938,10 +938,6 @@ select {
   top: 50%;
 }
 
-.left-2\/4 {
-  left: 50%;
-}
-
 .left-full {
   left: 100%;
 }
@@ -1035,12 +1031,16 @@ select {
   margin-top: 1.75rem;
 }
 
-.ml-32 {
-  margin-left: 8rem;
+.ml-20 {
+  margin-left: 5rem;
 }
 
 .-mt-7 {
   margin-top: -1.75rem;
+}
+
+.ml-32 {
+  margin-left: 8rem;
 }
 
 .ml-4 {
@@ -1057,10 +1057,6 @@ select {
 
 .mt-0 {
   margin-top: 0px;
-}
-
-.ml-20 {
-  margin-left: 5rem;
 }
 
 .box-border {
@@ -1169,10 +1165,6 @@ select {
 
 .h-5 {
   height: 1.25rem;
-}
-
-.h-\[70vh\] {
-  height: 70vh;
 }
 
 .h-auto {
@@ -1301,11 +1293,6 @@ select {
 
 .border-separate {
   border-collapse: separate;
-}
-
-.-translate-x-1\/4 {
-  --tw-translate-x: -25%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .-translate-y-1\/2 {
@@ -3170,15 +3157,9 @@ select {
   content: "hello";
 }
 
-/* pseudo selectores y otros especiales */
-
-:root {
-  --primary: #ffffff;
-  --secondary: #3f2f21;
-  --bg-primary: rgba(190, 183, 171, 0.3);
-}
-
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Ruthie&display=swap" rel="stylesheet');
 
 .hover\:bg-slate-700:hover {
   --tw-bg-opacity: 1;
@@ -3388,12 +3369,12 @@ select {
     }
   }
 
-  .sm\:left-0 {
-    left: 0px;
-  }
-
   .sm\:left-2\/4 {
     left: 50%;
+  }
+
+  .sm\:left-0 {
+    left: 0px;
   }
 
   .sm\:mt-7 {
@@ -3501,16 +3482,8 @@ select {
 }
 
 @media (min-width: 1024px) {
-  .lg\:h-full {
-    height: 100%;
-  }
-
   .lg\:h-\[36rem\] {
     height: 36rem;
-  }
-
-  .lg\:w-auto {
-    width: auto;
   }
 }
 
@@ -3527,5 +3500,3 @@ select {
     height: 46rem;
   }
 }
-
-
