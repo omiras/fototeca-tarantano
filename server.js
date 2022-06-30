@@ -161,7 +161,7 @@ app.post('/imgupload', async function (req, res) {
             //validate if image size is not too big
             imgData = await probe(imgURL);
 
-            if (imgData.length > 1000000) {
+            if (imgData.length > 500000) {
                 error = 3;
             }
         }
