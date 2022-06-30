@@ -15,8 +15,7 @@ const isImageURL = require('image-url-validator').default;
 
 const probe = require('probe-image-size');
 
-let imgURL, error;
-let isImage, notTooBig, imgData;
+let imgURL, error, imgData;
 
 
 app.set('view engine', 'ejs');
@@ -59,7 +58,7 @@ nextId = function () {
 }
 
 /* check if new image URL already exists*/
-let existsURL = function (imgURL) {
+/* let existsURL = function (imgURL) {
     let result;
     // console.log(imgURL);
     pictures.filter((obj) => {
@@ -74,7 +73,24 @@ let existsURL = function (imgURL) {
         error = 0;
     })
     return result;
+} */
+
+
+function checkURL(pics) {
+    //console.log("pics = ", pics.URL);
+    //console.log("url = ", imgURL);
+    return pics.URL == imgURL;
 }
+
+//validate if url refers to an image
+/* async function isValidImage() {
+    let isImage = await isImageURL(imgURL).then(is_image => {
+
+        //console.log("isImage: ", isImage); 
+        return is_image
+    });
+
+} */
 
 
 /* creates a color pallete for every image */
@@ -125,36 +141,36 @@ app.post('/imgupload', async function (req, res) {
     //validate if url is already in our "database"
 
 
-    let isInDataBase = existsURL(imgURL);
-    console.log("isInDataBase: ", isInDataBase );
+    //let isInDataBase = existsURL(imgURL);
 
-    if (!isInDataBase) {
+    let isInDataBase = pictures.some(checkURL);
+
+    console.log("isInDataBase: ", isInDataBase);
+
+    if (isInDataBase) {
+        error = 1;
+    } else {
         //validate if url refers to an image
-        isImage = await isImageURL(imgURL).then(is_image => {
-            if (!is_image) {
-                error = 2;
-            }
-            console.log("isImage: ", isImage);
+        let isImage = await isImageURL(imgURL).then(is_image => {
             return is_image
         });
-    }
-
-    if (!isInDataBase && isImage) {
-        //validate if image size is not too big
-        imgData = await probe(imgURL);
-
-        if (imgData.length > 1000000) {
-
-            error = 3;
-            notTooBig = false;
-
+        console.log("isImage: ", isImage);
+        if (!isImage) {
+            error = 2;
         } else {
-            notTooBig = true
+            //validate if image size is not too big
+            imgData = await probe(imgURL);
+
+            if (imgData.length > 1000000) {
+                error = 3;
+            }
         }
     }
 
+    console.log("error después de validaciones: ", error);
 
-    if (error==0) {
+
+    if (error == 0) {
         let cPallete = await myColorPallete(imgURL);
 
         let myNewPic = {
