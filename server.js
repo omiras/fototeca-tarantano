@@ -1,7 +1,8 @@
+/*   APP SETTINGS        */
 const express = require('express');
 //const path = require('path');
 const fs = require('fs');
-const url = require('url');  
+const url = require('url');
 const app = express();
 
 const {
@@ -10,14 +11,24 @@ const {
 
 
 const pictures = JSON.parse(fs.readFileSync('./photos.json'));
-
 const isImageURL = require('image-url-validator').default;
 
-let imgURL;
+const probe = require('probe-image-size');
+
+let imgURL, error;
+let isImage, notTooBig, imgData;
 
 
-//sort pictures by date
+app.set('view engine', 'ejs');
+app.use(express.static('public'))
 
+app.use(express.urlencoded({
+    extended: false
+})); //get data from form via POST
+
+
+
+/* sort pictures by date */
 sortPics = function () {
     pictures.sort((a, b) => {
         if (a.date < b.date) {
@@ -30,47 +41,55 @@ sortPics = function () {
     });
 }
 
-//creates an id number for a new image 
+/* creates an id number for a new image  */
 nextId = function () {
     const ids = pictures.map(obj => {
         return obj.id;
     });
-    //console.log(ids.length);
-    
+
     let nextId;
 
-    if(ids.length == 0){
+    if (ids.length == 0) {
         nextId = 1
-    }else{
+    } else {
         nextId = Math.max(...ids) + 1;
     };
     return nextId;
-    
+
 }
 
-//creates a color pallete for every image
+/* check if new image URL already exists*/
+let existsURL = function (imgURL) {
+    let result;
+    // console.log(imgURL);
+    pictures.filter((obj) => {
+        //   console.log(pictures);
+        if (obj.URL == imgURL) {
+            //console.log(obj.URL);
+            result = false;
+            error = 1
+            return
+        }
+        result = true;
+        error = 0;
+    })
+    return result;
+}
+
+
+/* creates a color pallete for every image */
 const myColorPallete = (async (imageURL) => {
     const colorPallete = await getPaletteFromURL(imageURL);
-    //console.log(colorPallete);
-
     return colorPallete;
-
 });
 
 
-//app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-//app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.static('public'))
 
-app.use(express.urlencoded({
-    extended: false
-})); //get data from form via POST
 
+/*      ENDPOINTS      */
+/* index */
 app.get("/", (req, res) => {
-    if (pictures.length == 0){
-        //console.log(pictures.length);
-        //res.render("/nodata")
+    if (pictures.length == 0) {
         res.render("nodata");
     } else {
         sortPics();
@@ -80,49 +99,95 @@ app.get("/", (req, res) => {
             page_name: 'home'
         });
     }
-
-    
 })
 
+/* add picture section */
 app.get("/upload", (req, res) => {
 
-   // console.log(req.query);
-    //let error = 0;
-   let errorCode = req.query.error;
-   let error = errorCode;
-//   let message;
+    let errorCode = req.query.error;
+    let error = errorCode;
 
-/*     if (errorCode){
-
-        if(errorCode == 1){
-            message = `Something went wrong. It seems that the URL ${imgURL} is not a valid image`;
-        } else {
-            message = `That's a very nice photo, but the URL: ${imgURL} is already in our database`;
-        }
-
-        console.log(message);
-    }else{
-        console.log("no query, body");
-    } */
-
-
-//console.log(error);
     res.render("form", {
-        page_name: 'upload', //siempre tiene que ser un objeto, incluso si es solo una variable
+        page_name: 'upload',
         error: error,
         imgURL: imgURL
     });
 })
 
-/* app.get("/error", (req, res) => {
-    res.render("404");
-})
- */
+
+/* upload a new image */
+app.post('/imgupload', async function (req, res) {
+
+    imgURL = req.body.url
+    error = 0;
+    
+
+    //validate if url is already in our "database"
+    let notInDataBase = existsURL(imgURL);
+
+
+    if (!error) {
+        //validate if url refers to an image
+        isImage = await isImageURL(imgURL).then(is_image => {
+            if (!is_image) {
+                error = 2;
+            }
+            return is_image
+        });
+    }
+
+
+    //validate if image size is not too big
+    if (!error) {
+        imgData = await probe(imgURL);
+        
+        if(imgData.length > 1000000){
+            
+            error = 3;
+            notTooBig = false;
+            
+        }else{
+        notTooBig = true
+        }
+    };  
+
+
+    if (!error) {
+        let cPallete = await myColorPallete(imgURL);
+
+        let myNewPic = {
+            id: nextId(),
+            title: req.body.title,
+            URL: imgURL,
+            date: req.body.date,
+            pallete: cPallete,
+            size: imgData.length,
+            width: imgData.width,
+            height: imgData.height
+        }
+
+        pictures.push(myNewPic);
+
+        let data = JSON.stringify(pictures, null, 2);
+        fs.writeFileSync('photos.json', data);
+
+        res.redirect("/");
+    } else {
+        console.log("error before redirect: ", error);
+        res.redirect(url.format({
+            pathname: "/upload",
+            query: {
+                "error": error
+            }
+        }));
+    }
+});
+
+
+/* modify (title o date) or delete an image */
 app.get("/update", (req, res) => {
-    //console.log(req.query);
     const q = req.query.q;
     const id = req.query.id;
-    //res.send(id);
 
     if (q == "delete") {
         pictures.filter((obj, i) => {
@@ -136,7 +201,6 @@ app.get("/update", (req, res) => {
     if (q == "update") {
         const title = req.query.title;
         const date = req.query.date;
-        console.log(q,id,title,date);
         pictures.filter((obj, i) => {
             if (obj.id == id) {
                 pictures[i].title = title;
@@ -146,82 +210,15 @@ app.get("/update", (req, res) => {
         })
     }
 
-
     let data = JSON.stringify(pictures, null, 2);
     fs.writeFileSync('photos.json', data);
 
     res.redirect("/");
-
-    //console.log(pictures);
 })
-
-app.post('/imgupload', async function (req, res) {
-
-    let error = 0;
-    imgURL = req.body.url
-
-    let isImage = await isImageURL(imgURL).then(is_image => {
-        if (!is_image) {
-            error = 1;
-        }
-        return is_image
-    });
-
-
-    let notInDataBase = true;
-
-//console.log("isImage", isImage);
-
-    pictures.filter((obj, i) => {
-        if (obj.URL == imgURL) {
-            //console.log("imagen repetida: ", imgURL);
-            notInDataBase = false
-            error = 2;
-        }
-
-    })
-
-    //console.log("notInDataBase", notInDataBase);
-
-    if (isImage && notInDataBase) {
-        let cPallete = await myColorPallete(imgURL);
-
-        let myNewPic = {
-            id: nextId(),
-            title: req.body.title,
-            URL: imgURL,
-            date: req.body.date,
-            pallete: cPallete
-        }
-
-        pictures.push(myNewPic);
-
-        let data = JSON.stringify(pictures, null, 2);
-        fs.writeFileSync('photos.json', data);
-
-        res.redirect("/");
-    } else {
-        //res.redirect("/upload");
-        res.redirect(url.format({
-            pathname:"/upload",
-            query: {
-               "error":error
-             }
-          }));
-    }
-
-});
-
-
-
-
-
 
 app.use((req, res) => {
     res.status(404).render('404');
 })
-
-
 
 const server = app.listen(process.env.PORT || 3000, () => {
     console.log(`The application started on port ${server.address().port}`);

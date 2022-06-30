@@ -2646,6 +2646,10 @@ select {
   font-weight: 500;
 }
 
+.font-normal {
+  font-weight: 400;
+}
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -3437,6 +3441,10 @@ select {
 
   .md\:ml-0 {
     margin-left: 0px;
+  }
+
+  .md\:block {
+    display: block;
   }
 
   .md\:h-80 {
