@@ -66,11 +66,11 @@ let existsURL = function (imgURL) {
         //   console.log(pictures);
         if (obj.URL == imgURL) {
             //console.log(obj.URL);
-            result = false;
+            result = true;
             error = 1
             return
         }
-        result = true;
+        result = false;
         error = 0;
     })
     return result;
@@ -120,39 +120,41 @@ app.post('/imgupload', async function (req, res) {
 
     imgURL = req.body.url
     error = 0;
-    
+
 
     //validate if url is already in our "database"
-    let notInDataBase = existsURL(imgURL);
 
 
-    if (!error) {
+    let isInDataBase = existsURL(imgURL);
+    console.log("isInDataBase: ", isInDataBase );
+
+    if (!isInDataBase) {
         //validate if url refers to an image
         isImage = await isImageURL(imgURL).then(is_image => {
             if (!is_image) {
                 error = 2;
             }
+            console.log("isImage: ", isImage);
             return is_image
         });
     }
 
-
-    //validate if image size is not too big
-    if (!error) {
+    if (!isInDataBase && isImage) {
+        //validate if image size is not too big
         imgData = await probe(imgURL);
-        
-        if(imgData.length > 1000000){
-            
+
+        if (imgData.length > 1000000) {
+
             error = 3;
             notTooBig = false;
-            
-        }else{
-        notTooBig = true
+
+        } else {
+            notTooBig = true
         }
-    };  
+    }
 
 
-    if (!error) {
+    if (error==0) {
         let cPallete = await myColorPallete(imgURL);
 
         let myNewPic = {
