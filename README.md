@@ -21,9 +21,9 @@ then run the app with
 
 
 ## Extra modules
--"[color-thief-node](https://www.npmjs.com/package/color-thief-node)": to get a color palette  
--"[image-url-validator](https://www.npmjs.com/package/image-url-validator)": to validate that the image directs to a valid image  
--"[probe-image-size](https://www.npmjs.com/package/probe-image-size)": to calculate image size before addition  
+[color-thief-node](https://www.npmjs.com/package/color-thief-node)": to get a color palette  
+[image-url-validator](https://www.npmjs.com/package/image-url-validator)": to validate that the image directs to a valid image  
+[probe-image-size](https://www.npmjs.com/package/probe-image-size)": to calculate image size before addition  
 
 ## Utils / Resources
 [Tailwind Forms Plugin](https://github.com/tailwindlabs/tailwindcss-forms)  
