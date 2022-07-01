@@ -1,6 +1,5 @@
 /*   APP SETTINGS        */
 const express = require('express');
-//const path = require('path');
 const fs = require('fs');
 const url = require('url');
 const app = express();
@@ -57,42 +56,6 @@ nextId = function () {
 
 }
 
-/* check if new image URL already exists*/
-/* let existsURL = function (imgURL) {
-    let result;
-    // console.log(imgURL);
-    pictures.filter((obj) => {
-        //   console.log(pictures);
-        if (obj.URL == imgURL) {
-            //console.log(obj.URL);
-            result = true;
-            error = 1
-            return
-        }
-        result = false;
-        error = 0;
-    })
-    return result;
-} */
-
-
-function checkURL(pics) {
-    //console.log("pics = ", pics.URL);
-    //console.log("url = ", imgURL);
-    return pics.URL == imgURL;
-}
-
-//validate if url refers to an image
-/* async function isValidImage() {
-    let isImage = await isImageURL(imgURL).then(is_image => {
-
-        //console.log("isImage: ", isImage); 
-        return is_image
-    });
-
-} */
-
-
 /* creates a color pallete for every image */
 const myColorPallete = (async (imageURL) => {
     const colorPallete = await getPaletteFromURL(imageURL);
@@ -139,22 +102,16 @@ app.post('/imgupload', async function (req, res) {
 
 
     //validate if url is already in our "database"
+    let isInDataBase = pictures.some((pics) => pics.URL == imgURL);
 
-
-    //let isInDataBase = existsURL(imgURL);
-
-    let isInDataBase = pictures.some(checkURL);
-
-    console.log("isInDataBase: ", isInDataBase);
+    //console.log("isInDataBase: ", isInDataBase);
 
     if (isInDataBase) {
         error = 1;
     } else {
-        //validate if url refers to an image
-        let isImage = await isImageURL(imgURL).then(is_image => {
-            return is_image
-        });
-        console.log("isImage: ", isImage);
+        //validate if url is a valid image
+        let isImage = await isImageURL(imgURL).then(is_image => is_image);
+        //console.log("isImage: ", isImage);
         if (!isImage) {
             error = 2;
         } else {
@@ -167,7 +124,7 @@ app.post('/imgupload', async function (req, res) {
         }
     }
 
-    console.log("error después de validaciones: ", error);
+    //console.log("error después de validaciones: ", error);
 
 
     if (error == 0) {
@@ -191,7 +148,7 @@ app.post('/imgupload', async function (req, res) {
 
         res.redirect("/");
     } else {
-        console.log("error before redirect: ", error);
+        //console.log("error before redirect: ", error);
         res.redirect(url.format({
             pathname: "/upload",
             query: {
