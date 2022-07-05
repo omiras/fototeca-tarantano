@@ -15,7 +15,7 @@
     <!-- the gallery -->
     <section id="mainGallery" class="flex justify-center w-screen flex-wrap px-24">
         <% pics.forEach(function(p,i) { %>
-        <div class="each font-sans m-2 drop-shadow-md hover:drop-shadow-xl bg-slate-700/70 hover:bg-slate-700 p-3 cursor-pointer flex-shrink-0"
+        <div class="animate each font-sans m-2 drop-shadow-md hover:drop-shadow-xl bg-slate-700/70 hover:bg-slate-700 p-3 cursor-pointer flex-shrink-0"
             id="<%= p.id %>_<%= ((p.title).replace(/\s/g, '_')).toLowerCase() %>" data-id="<%= p.id %>"
             data-name="<%= p.title %>" data-url="<%= p.URL %>" data-date="<%= p.date %>"
             data-color1="<%= p.pallete[0] %>" data-color2="<%= p.pallete[1] %>" data-color3="<%= p.pallete[2] %>"
