@@ -32,3 +32,5 @@ node_modules
 
 #notes and helpers
 notes
+
+package-lock.json
